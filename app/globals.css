@@ -1,26 +1,345 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --brand-green: #1a3d3d;
+  --brand-gold: #c9b896;
+  --brand-cream: #f5f1e8;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--brand-cream);
+  color: rgb(17 24 39);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--brand-cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(26, 61, 61, 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(26, 61, 61, 0.5);
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--brand-gold);
+  color: var(--brand-green);
+}
+
+::-moz-selection {
+  background-color: var(--brand-gold);
+  color: var(--brand-green);
+}
+
+/* Button Styles */
+.btn-primary {
+  padding: 0.75rem 2rem;
+  background-color: var(--brand-green);
+  color: var(--brand-cream);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  transition: all 0.3s;
+  border: 1px solid var(--brand-green);
+  border-radius: 0;
+}
+
+.btn-primary:hover {
+  background-color: rgba(26, 61, 61, 0.9);
+  border-color: var(--brand-gold);
+}
+
+.btn-secondary {
+  padding: 0.75rem 2rem;
+  background-color: transparent;
+  color: var(--brand-green);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  transition: all 0.3s;
+  border: 1px solid var(--brand-green);
+  border-radius: 0;
+}
+
+.btn-secondary:hover {
+  background-color: var(--brand-green);
+  color: var(--brand-cream);
+}
+
+.btn-gold {
+  padding: 0.75rem 2rem;
+  background-color: var(--brand-gold);
+  color: var(--brand-green);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  transition: all 0.3s;
+  border: 1px solid var(--brand-gold);
+  border-radius: 0;
+}
+
+.btn-gold:hover {
+  background-color: rgba(201, 184, 150, 0.9);
+}
+
+/* Heading Styles */
+.heading-luxury {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: var(--brand-green);
+}
+
+.heading-display {
+  font-family: var(--font-cinzel), serif;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: var(--brand-green);
+}
+
+/* Card Styles */
+.card-luxury {
+  background-color: white;
+  border: 1px solid rgb(229 231 235);
+  transition: all 0.5s;
+  overflow: hidden;
+}
+
+.card-luxury:hover {
+  border-color: var(--brand-gold);
+}
+
+/* Input Styles */
+.input-luxury {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: white;
+  border: 1px solid rgb(209 213 219);
+  border-radius: 0;
+  transition: all 0.3s;
+  font-size: 1rem;
+}
+
+.input-luxury::placeholder {
+  color: rgb(156 163 175);
+  font-size: 0.875rem;
+}
+
+.input-luxury:focus {
+  outline: none;
+  border-color: var(--brand-green);
+  box-shadow: 0 0 0 1px var(--brand-green);
+}
+
+/* Badge Styles */
+.badge-new {
+  padding: 0.25rem 0.75rem;
+  background-color: var(--brand-gold);
+  color: var(--brand-green);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.badge-sold-out {
+  padding: 0.25rem 0.75rem;
+  background-color: rgb(31 41 55);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.badge-pre-order {
+  padding: 0.25rem 0.75rem;
+  background-color: var(--brand-green);
+  color: var(--brand-cream);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Container */
+.container-luxury {
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-luxury {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-luxury {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Section Spacing */
+.section-padding {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-padding {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
+}
+
+/* Divider */
+.divider-luxury {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--brand-gold), transparent);
+}
+
+/* Text Gradient */
+.text-gradient-gold {
+  background: linear-gradient(to right, var(--brand-gold), #fbbf24, var(--brand-gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Hover lift effect */
+.hover-lift {
+  transition: transform 0.3s;
+}
+
+.hover-lift:hover {
+  transform: translateY(-0.25rem);
+}
+
+/* Image overlay */
+.overlay-dark {
+  position: relative;
+}
+
+.overlay-dark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Luxury underline */
+.underline-luxury {
+  position: relative;
+}
+
+.underline-luxury::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  width: 0;
+  background-color: var(--brand-gold);
+  transition: all 0.3s;
+}
+
+.underline-luxury:hover::after {
+  width: 100%;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Loading spinner */
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 4px solid var(--brand-cream);
+  border-top-color: var(--brand-gold);
+  border-radius: 9999px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Cart Drawer Animation */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.badge-luxury {
+  @apply absolute top-6 left-6 px-4 py-1 text-[9px] uppercase tracking-[0.3em] z-10 font-medium;
+}
+
+.heading-display {
+  font-family: 'Cinzel', serif; /* Or your Mulaan serif font */
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
