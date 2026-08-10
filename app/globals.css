@@ -343,3 +343,17 @@ html {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* globals.css */
+.mulaan-magazine {
+  box-shadow: 0 0 50px rgba(0,0,0,0.2);
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .mulaan-magazine {
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+

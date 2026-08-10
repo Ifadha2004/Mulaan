@@ -1,17 +1,10 @@
 import mongoose, { Schema, Document, Model } from 'mongoose'
 
-// Add this interface above ICollection
 export interface ICollectionMedia {
   url: string
   type: 'image' | 'video'
   alt?: string
   order: number
-}
-
-// Update ICollection
-export interface ICollection extends Document {
-  // ... existing fields
-  media: ICollectionMedia[] // The Lookbook Gallery
 }
 
 export interface ICollection extends Document {
@@ -20,6 +13,7 @@ export interface ICollection extends Document {
   description: string
   coverImage: string
   coverImagePublicId?: string
+  media: ICollectionMedia[] // Lookbook gallery
   launchDate?: Date
   isActive: boolean
   featured: boolean
@@ -27,6 +21,16 @@ export interface ICollection extends Document {
   createdAt: Date
   updatedAt: Date
 }
+
+const CollectionMediaSchema = new Schema<ICollectionMedia>(
+  {
+    url: { type: String, required: true },
+    type: { type: String, enum: ['image', 'video'], default: 'image' },
+    alt: { type: String },
+    order: { type: Number, default: 0 },
+  },
+  { _id: false }
+)
 
 const CollectionSchema = new Schema<ICollection>(
   {
@@ -55,6 +59,10 @@ const CollectionSchema = new Schema<ICollection>(
     coverImagePublicId: {
       type: String,
     },
+    media: {
+      type: [CollectionMediaSchema],
+      default: [],
+    },
     launchDate: {
       type: Date,
     },
@@ -70,12 +78,6 @@ const CollectionSchema = new Schema<ICollection>(
       type: Number,
       default: 0,
     },
-    media: [{
-      url: { type: String, required: true },
-      type: { type: String, enum: ['image', 'video'], default: 'image' },
-      alt: String,
-      order: { type: Number, default: 0 }
-    }],
   },
   {
     timestamps: true,

@@ -1,19 +1,24 @@
 import mongoose, { Schema, Document, Model } from 'mongoose'
 import bcrypt from 'bcryptjs'
 
-export interface IUser extends Document {
+export type AdminRole = 'super_admin' | 'admin' | 'finance' | 'viewer'
+
+export interface IAdmin extends Document {
   name: string
   email: string
   password: string
-  role: string
+  role: AdminRole
   isActive: boolean
   lastLogin?: Date
+  lastLoginIp?: string
+  failedLoginAttempts: number
+  lockedUntil?: Date
   createdAt: Date
   updatedAt: Date
   comparePassword(candidatePassword: string): Promise<boolean>
 }
 
-const UserSchema = new Schema<IUser>(
+const AdminSchema = new Schema<IAdmin>(
   {
     name: {
       type: String,
@@ -32,18 +37,29 @@ const UserSchema = new Schema<IUser>(
       type: String,
       required: [true, 'Password is required'],
       minlength: [8, 'Password must be at least 8 characters'],
-      select: false,
+      select: false, // never returned by default queries
     },
     role: {
       type: String,
-      enum: ['admin', 'super_admin'],
-      default: 'admin',
+      enum: ['super_admin', 'admin', 'finance', 'viewer'],
+      default: 'viewer',
+      required: true,
     },
     isActive: {
       type: Boolean,
       default: true,
     },
     lastLogin: {
+      type: Date,
+    },
+    lastLoginIp: {
+      type: String,
+    },
+    failedLoginAttempts: {
+      type: Number,
+      default: 0,
+    },
+    lockedUntil: {
       type: Date,
     },
   },
@@ -53,12 +69,13 @@ const UserSchema = new Schema<IUser>(
 )
 
 // Indexes
-UserSchema.index({ email: 1 }, { unique: true })
+AdminSchema.index({ email: 1 }, { unique: true })
+AdminSchema.index({ role: 1 })
 
-// Hash password before saving
-UserSchema.pre('save', async function (next: any) {
+// Hash password before saving (only if changed)
+AdminSchema.pre('save', async function (next: any) {
   if (!this.isModified('password')) return next()
-  
+
   try {
     const salt = await bcrypt.genSalt(12)
     this.password = await bcrypt.hash(this.password, salt)
@@ -68,14 +85,13 @@ UserSchema.pre('save', async function (next: any) {
   }
 })
 
-// Method to compare passwords
-UserSchema.methods.comparePassword = async function (
+// Instance method to verify password on login
+AdminSchema.methods.comparePassword = async function (
   candidatePassword: string
 ): Promise<boolean> {
   return bcrypt.compare(candidatePassword, this.password)
 }
 
-const User: Model<IUser> =
-  mongoose.models.User || mongoose.model<IUser>('User', UserSchema)
+const Admin: Model<IAdmin> = mongoose.models.Admin || mongoose.model<IAdmin>('Admin', AdminSchema)
 
-export default User
+export default Admin

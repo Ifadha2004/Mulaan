@@ -1,15 +1,19 @@
 import mongoose, { Schema, Document, Model } from 'mongoose'
 
+export type PreOrderStatus = 'scheduled' | 'active' | 'closed'
+
 export interface IPreOrder extends Document {
   productId: mongoose.Types.ObjectId
   campaignName: string
   startDate: Date
   endDate: Date
   isActive: boolean
-  ordersCount: number
   totalOrders: number
   createdAt: Date
   updatedAt: Date
+  isExpired(): boolean
+  daysRemaining(): number
+  getStatus(): PreOrderStatus
 }
 
 const PreOrderSchema = new Schema<IPreOrder>(
@@ -33,21 +37,10 @@ const PreOrderSchema = new Schema<IPreOrder>(
     endDate: {
       type: Date,
       required: [true, 'End date is required'],
-      validate: {
-        validator: function (this: any, value: Date) {
-          return value > this.startDate
-        },
-        message: 'End date must be after start date',
-      },
     },
     isActive: {
       type: Boolean,
       default: true,
-    },
-    ordersCount: {
-      type: Number,
-      default: 0,
-      min: 0,
     },
     totalOrders: {
       type: Number,
@@ -64,7 +57,16 @@ const PreOrderSchema = new Schema<IPreOrder>(
 PreOrderSchema.index({ productId: 1 }, { unique: true })
 PreOrderSchema.index({ isActive: 1, endDate: 1 })
 
-// Methods
+// Document-level validation — synchronous hook, no `next` callback needed.
+// Mongoose (v5+) treats a pre-hook with no callback param as synchronous,
+// which sidesteps the overload ambiguity that was breaking `next`'s type.
+PreOrderSchema.pre('validate', function () {
+  if (this.startDate && this.endDate && this.endDate <= this.startDate) {
+    this.invalidate('endDate', 'End date must be after start date')
+  }
+})
+
+// ── Instance methods ──────────────────────────
 PreOrderSchema.methods.isExpired = function (): boolean {
   return new Date() > this.endDate
 }
@@ -73,7 +75,14 @@ PreOrderSchema.methods.daysRemaining = function (): number {
   const now = new Date()
   const end = new Date(this.endDate)
   const diff = end.getTime() - now.getTime()
-  return Math.ceil(diff / (1000 * 60 * 60 * 24))
+  return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)))
+}
+
+PreOrderSchema.methods.getStatus = function (): PreOrderStatus {
+  const now = new Date()
+  if (!this.isActive || now > this.endDate) return 'closed'
+  if (now < this.startDate) return 'scheduled'
+  return 'active'
 }
 
 const PreOrder: Model<IPreOrder> =
