@@ -37,7 +37,7 @@ const AdminSchema = new Schema<IAdmin>(
       type: String,
       required: [true, 'Password is required'],
       minlength: [8, 'Password must be at least 8 characters'],
-      select: false, // never returned by default queries
+      select: false,
     },
     role: {
       type: String,
@@ -72,17 +72,13 @@ const AdminSchema = new Schema<IAdmin>(
 AdminSchema.index({ email: 1 }, { unique: true })
 AdminSchema.index({ role: 1 })
 
-// Hash password before saving (only if changed)
-AdminSchema.pre('save', async function (next: any) {
-  if (!this.isModified('password')) return next()
+// Hash password before saving (only if changed) — async, no `next` callback.
+// Mongoose runs this as a Promise-returning hook; errors propagate by throwing.
+AdminSchema.pre('save', async function () {
+  if (!this.isModified('password')) return
 
-  try {
-    const salt = await bcrypt.genSalt(12)
-    this.password = await bcrypt.hash(this.password, salt)
-    next()
-  } catch (error: any) {
-    next(error)
-  }
+  const salt = await bcrypt.genSalt(12)
+  this.password = await bcrypt.hash(this.password, salt)
 })
 
 // Instance method to verify password on login

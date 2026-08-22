@@ -3,8 +3,7 @@ import { Inter, Cormorant_Garamond, Cinzel } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/config/site";
 import { Toaster } from "react-hot-toast";
-import Navbar from "@/components/shared/Navbar";
-import Footer from "@/components/shared/Footer";
+import { blosta } from "@/lib/fonts";
 
 // Elegant serif font for headings (matches logo aesthetic)
 const cormorant = Cormorant_Garamond({
@@ -83,11 +82,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${cormorant.variable} ${cinzel.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${inter.variable} ${cormorant.variable} ${cinzel.variable} ${blosta.variable}`}
+      suppressHydrationWarning
+    >
       <body className={`${inter.className} antialiased`}>
-        <Navbar />
         {children}
-        <Footer />
         <Toaster 
           position="top-right"
           toastOptions={{

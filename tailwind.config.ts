@@ -55,6 +55,7 @@ const config: Config = {
         serif: ['var(--font-cormorant)', 'Georgia', 'serif'],
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
         display: ['var(--font-cinzel)', 'serif'],
+        blosta: ['var(--font-blosta)', 'serif'],
       },
     },
   },

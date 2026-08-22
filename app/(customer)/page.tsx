@@ -1,130 +1,178 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/shared/ui'
-import { ArrowRight, ShoppingBag, Sparkles } from 'lucide-react'
+import { motion, Variants } from 'framer-motion'
+import Preloader from '@/components/shared/ui/Preloader'
+
+const fadeIn: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] } 
+  }
+}
 
 export default function HomePage() {
-  return (
-    <div className="min-h-screen bg-brand-cream-200">
-      {/* Hero Section */}
-      <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-brand-green-900/20 to-transparent" />
-        <div className="container-luxury relative z-10 text-center">
-          <div className="max-w-4xl mx-auto space-y-8 animate-fade-in-up">
-            <div className="flex justify-center mb-4">
-              <Sparkles className="w-12 h-12 text-brand-gold" />
-            </div>
-            <h1 className="font-display text-6xl md:text-7xl lg:text-8xl text-brand-green-800 tracking-luxury">
-              MULAAN
-            </h1>
-            <p className="font-serif text-2xl md:text-3xl text-brand-green-700 tracking-wide">
-              Modest Wear for the Modern Woman
-            </p>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Discover timeless elegance in every piece. Limited quantities, exclusive designs crafted with care.
-            </p>
-            <div className="flex gap-4 justify-center pt-4">
-              <Link href="/products">
-                <Button variant="gold" size="lg" className="group">
-                  Shop Collection
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-              <Link href="/about">
-                <Button variant="secondary" size="lg">
-                  Our Story
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+  const [isLoaded, setIsLoaded] = useState(false)
 
-      {/* Featured Categories */}
-      <section className="section-padding bg-white">
-        <div className="container-luxury">
-          <h2 className="font-serif text-4xl mb-12 text-center text-brand-green-800 tracking-wide">
-            Shop by Collection
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {['New Arrivals', 'Best Sellers', 'Ramadan Special'].map((category) => (
-              <Link
-                key={category}
-                href="/products"
-                className="group relative aspect-square overflow-hidden bg-gray-100 hover:shadow-2xl transition-all duration-500"
+  useEffect(() => {
+    // This matches the timing of your Preloader (approx 3.5s to finish 100%)
+    const timer = setTimeout(() => {
+      setIsLoaded(true)
+    }, 3800) 
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  return (
+    <>
+      <Preloader />
+
+      <motion.main 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isLoaded ? 1 : 0 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        className="-mt-28 min-h-screen bg-[#FCFAF7]"
+      >
+        
+        {/* 1. CINEMATIC VIDEO HERO */}
+        <section className="relative h-screen w-full overflow-hidden bg-[#0a1a1a]"> 
+          {/* Changed bg-brand-green to a deeper, near-black forest green for cinematic depth */}
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 h-full w-full object-cover opacity-35 mix-blend-luminosity" 
+            /* Reduced opacity to 25% and added luminosity blend for a silver-screen effect */
+          >
+            <source src="/videos/home-video.mp4" type="video/mp4" />
+          </video>
+
+          {/* Multi-layered Cinematic Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-black via-transparent to-black/40" />
+          <div className="absolute inset-0 bg-black/20" /> 
+
+          <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
+            <motion.span 
+              initial="hidden"
+              animate={isLoaded ? "visible" : "hidden"}
+              variants={fadeIn}
+              className="mb-4 text-[10px] tracking-[1em] text-brand-gold/80 uppercase font-bold"
+            >
+              Mulaan Est. 2025
+            </motion.span>
+            
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 1.5, delay: 0.2 }}
+              className="heading-luxury text-6xl md:text-7xl leading-[1.1] tracking-tighter"
+            >
+              <span 
+                className="block text-brand-cream"
+                style={{ 
+                  textShadow: '0 0 40px rgba(197, 160, 89, 0.2)', /* Subtle gold glow shadow */
+                  filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.4))'
+                }}
               >
-                <div className="absolute inset-0 bg-brand-green-800/40 group-hover:bg-brand-green-800/60 transition-colors flex items-center justify-center">
-                  <div className="text-center">
-                    <h3 className="font-serif text-3xl text-white mb-4 tracking-wide">
-                      {category}
-                    </h3>
-                    <span className="text-brand-gold group-hover:underline">
-                      Explore →
-                    </span>
-                  </div>
-                </div>
+                By women who dare,
+              </span>
+              <span className="italic font-light text-brand-gold block mt-4">
+                for women who define.
+              </span>
+            </motion.h1>
+
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={isLoaded ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ delay: 1, duration: 1 }}
+              className="mt-16"
+            >
+              <Link 
+                href="/collections" 
+                className="group relative inline-block px-14 py-5 text-[10px] tracking-[0.6em] text-white uppercase border border-white/20 hover:text-brand-green transition-all duration-700 overflow-hidden"
+              >
+                {/* The text needs to be relative z-10 so it stays above the gold background */}
+                <span className="relative z-10">Explore Collections</span>
+                
+                {/* The Gold Background */}
+                <div className="absolute inset-0 bg-brand-gold transform translate-y-[101%] group-hover:translate-y-0 transition-transform duration-500 ease-in-out" />
               </Link>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* 2. THE FOUNDER TEASER */}
+        <section className="py-32 bg-[#FCFAF7]">
+          <div className="container-luxury flex flex-col md:flex-row items-center gap-20">
+            <motion.div 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={fadeIn}
+              className="w-full md:w-1/2 relative"
+            >
+              <div className="absolute -top-6 -left-6 w-32 h-32 border-t border-l border-brand-gold" />
+              <div className="overflow-hidden shadow-2xl aspect-[4/5] bg-brand-green/5"> 
+                <img 
+                  src="/Us.png"
+                  alt="The Founders" 
+                  className="w-full h-full object-cover brightness-95 hover:grayscale transition-all duration-1000" 
+                />
+              </div>
+            </motion.div>
+
+            <motion.div 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeIn}
+              className="w-full md:w-1/2 space-y-10 px-4"
+            >
+              <div className="space-y-4 text-brand-green">
+                <span className="text-[10px] tracking-[0.6em] text-brand-gold uppercase font-bold">
+                  The Mulaan Duo
+                </span>
+                <h2 className="heading-luxury text-4xl md:text-6xl leading-[1.1]">
+                  Crafted by Kinship, <br /> 
+                  <span className="italic">Defined by Elegance.</span>
+                </h2>
+              </div>
+              <p className="text-sm md:text-base leading-relaxed text-brand-green/80 max-w-md font-light">
+                Two cousins, one vision. We invite you into the world of Mulaan—where every collection is a digital magazine of our shared journey.
+              </p>
+              <Link 
+                href="/about" 
+                className="inline-block text-[11px] tracking-[0.4em] uppercase border-b border-brand-gold pb-2 text-brand-green hover:text-brand-gold transition-all duration-500"
+              >
+                Discover the Story
+              </Link>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* 3. BRAND MARQUEE TICKER */}
+        <section className="relative bg-brand-green-800 py-10 overflow-hidden border-y border-brand-gold/20">
+          <div className="flex whitespace-nowrap animate-marquee">
+            {[0, 1].map((copy) => (
+              <div key={copy} className="flex items-center shrink-0">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <span
+                    key={i}
+                    className="flex items-center gap-8 px-8 font-blosta font-light text-6xl md:text-8xl tracking-tight text-brand-cream"
+                  >
+                    MULAAN
+                    <span className="text-brand-gold text-3xl md:text-4xl">✦</span>
+                  </span>
+                ))}
+              </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Why Choose Us */}
-      <section className="section-padding">
-        <div className="container-luxury">
-          <h2 className="font-serif text-4xl mb-12 text-center text-brand-green-800 tracking-wide">
-            The Mulaan Promise
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center p-8 bg-white shadow-md">
-              <div className="w-16 h-16 bg-brand-gold rounded-full flex items-center justify-center mx-auto mb-6">
-                <ShoppingBag className="w-8 h-8 text-brand-green-800" />
-              </div>
-              <h3 className="font-serif text-xl mb-3 text-brand-green-800">Limited Pieces</h3>
-              <p className="text-gray-600">
-                Each design is produced in limited quantities, ensuring exclusivity and uniqueness.
-              </p>
-            </div>
-            <div className="text-center p-8 bg-white shadow-md">
-              <div className="w-16 h-16 bg-brand-gold rounded-full flex items-center justify-center mx-auto mb-6">
-                <Sparkles className="w-8 h-8 text-brand-green-800" />
-              </div>
-              <h3 className="font-serif text-xl mb-3 text-brand-green-800">Premium Quality</h3>
-              <p className="text-gray-600">
-                Handpicked fabrics and meticulous craftsmanship in every piece we create.
-              </p>
-            </div>
-            <div className="text-center p-8 bg-white shadow-md">
-              <div className="w-16 h-16 bg-brand-gold rounded-full flex items-center justify-center mx-auto mb-6">
-                <ArrowRight className="w-8 h-8 text-brand-green-800" />
-              </div>
-              <h3 className="font-serif text-xl mb-3 text-brand-green-800">Fast Delivery</h3>
-              <p className="text-gray-600">
-                Quick and reliable shipping across the UAE. Your elegance, delivered.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="section-padding bg-brand-green-800 text-center">
-        <div className="container-luxury">
-          <h2 className="font-serif text-4xl mb-6 text-brand-gold tracking-wide">
-            Ready to Discover Your Style?
-          </h2>
-          <p className="text-brand-cream-200 text-lg mb-8 max-w-2xl mx-auto">
-            Browse our exclusive collection and find pieces that speak to your elegant style.
-          </p>
-          <Link href="/products">
-            <Button variant="gold" size="lg" className="group">
-              Start Shopping
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </Link>
-        </div>
-      </section>
-    </div>
+        </section>
+      </motion.main>
+    </>
   )
 }

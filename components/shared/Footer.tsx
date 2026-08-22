@@ -138,9 +138,9 @@ export default function Footer() {
   }
 
   return (
-    <footer className="relative bg-brand-green pt-32 pb-10 overflow-hidden">
+    <footer className="relative bg-brand-green pt-0 pb-10 overflow-hidden">
       {/* Top Border Line */}
-      <div className="container mx-auto px-6 mb-20">
+      <div className="container mx-auto px-6 mb-10">
         <div className="w-full h-[0.5px] bg-brand-gold/20" />
       </div>
 
