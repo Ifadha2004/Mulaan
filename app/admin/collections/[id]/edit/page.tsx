@@ -29,7 +29,9 @@ export default async function EditCollectionPage({
           coverImage: collection.coverImage,
           coverImagePublicId: collection.coverImagePublicId,
           media: collection.media || [],
-          launchDate: collection.launchDate,
+          launchDate: collection.launchDate
+            ? new Date(collection.launchDate).toISOString()
+            : undefined,
           isActive: collection.isActive,
           featured: collection.featured,
           order: collection.order,

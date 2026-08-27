@@ -2,11 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import cloudinary from '@/lib/cloudinary'
 import { getAdminSession } from '@/lib/auth/session'
 
-// POST: upload a single image file, returns { url, publicId }
 export async function POST(request: NextRequest) {
+  console.log('📥 [upload] Request received')
+
   try {
-    // Require a logged-in admin — never allow anonymous uploads
     const session = await getAdminSession()
+    console.log('🔐 [upload] Session check:', session ? `OK (${session.email})` : 'NO SESSION')
+
     if (!session) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
     }
@@ -14,13 +16,13 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData()
     const file = formData.get('file') as File | null
     const folder = (formData.get('folder') as string) || 'mulaan/misc'
+    console.log('📎 [upload] File:', file?.name, file?.size, file?.type, '| folder:', folder)
 
     if (!file) {
       return NextResponse.json({ success: false, error: 'No file provided' }, { status: 400 })
     }
 
-    // Basic guardrails
-    const MAX_SIZE = 8 * 1024 * 1024 // 8MB
+    const MAX_SIZE = 8 * 1024 * 1024
     if (file.size > MAX_SIZE) {
       return NextResponse.json(
         { success: false, error: 'File too large (max 8MB)' },
@@ -34,16 +36,18 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Convert the File to a base64 data URI Cloudinary's SDK can accept directly
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
     const base64 = `data:${file.type};base64,${buffer.toString('base64')}`
+    console.log('🔄 [upload] Converted to base64, calling Cloudinary...')
 
     const result = await cloudinary.uploader.upload(base64, {
       folder,
       resource_type: 'image',
       transformation: [{ quality: 'auto', fetch_format: 'auto' }],
     })
+
+    console.log('✅ [upload] Cloudinary success:', result.secure_url)
 
     return NextResponse.json({
       success: true,
@@ -53,15 +57,16 @@ export async function POST(request: NextRequest) {
       height: result.height,
     })
   } catch (error: any) {
-    console.error('Upload error:', error)
+    console.error('❌ [upload] FULL ERROR:', error)
+    console.error('❌ [upload] ERROR MESSAGE:', error?.message)
+    console.error('❌ [upload] ERROR NAME:', error?.name)
     return NextResponse.json(
-      { success: false, error: error.message || 'Upload failed' },
+      { success: false, error: error?.message || 'Upload failed' },
       { status: 500 }
     )
   }
 }
 
-// DELETE: remove an image from Cloudinary by its publicId
 export async function DELETE(request: NextRequest) {
   try {
     const session = await getAdminSession()

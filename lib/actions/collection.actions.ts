@@ -158,3 +158,18 @@ export async function deleteCollection(id: string) {
     return { success: false, error: error.message || 'Failed to delete collection' }
   }
 }
+
+// ── Public storefront reads (no auth required) ──────────────
+
+export async function getActiveCollections() {
+  await connectDB()
+  const collections = await Collection.find({ isActive: true }).sort({ order: 1, createdAt: -1 })
+  return serialize(collections)
+}
+
+export async function getCollectionBySlug(slug: string) {
+  await connectDB()
+  const collection = await Collection.findOne({ slug, isActive: true })
+  if (!collection) return null
+  return serialize(collection)
+}
