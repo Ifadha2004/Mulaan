@@ -20,6 +20,7 @@ interface CollectionFormData {
   coverImage: string
   coverImagePublicId?: string
   media: CollectionMediaInput[]
+  magazinePages: CollectionMediaInput[]
   launchDate?: string
   isActive: boolean
   featured: boolean
@@ -43,6 +44,15 @@ export async function getCollectionById(id: string) {
   return serialize(collection)
 }
 
+export async function getCollectionBySlug(slug: string) {
+  await connectDB()
+  // Only return active collections to the storefront — draft/inactive
+  // collections stay admin-only until the founder flips them live
+  const collection = await Collection.findOne({ slug, isActive: true })
+  if (!collection) return null
+  return serialize(collection)
+}
+
 export async function createCollection(data: CollectionFormData) {
   try {
     await requireAdminSession()
@@ -61,7 +71,15 @@ export async function createCollection(data: CollectionFormData) {
       coverImagePublicId: data.coverImagePublicId,
       media: data.media.map((m, i) => ({
         url: m.url,
+        publicId: m.publicId,
         type: m.type || 'image',
+        alt: m.alt || '',
+        order: i,
+      })),
+      magazinePages: data.magazinePages.map((m, i) => ({
+        url: m.url,
+        publicId: m.publicId,
+        type: 'image' as const,
         alt: m.alt || '',
         order: i,
       })),
@@ -101,7 +119,15 @@ export async function updateCollection(id: string, data: CollectionFormData) {
         coverImagePublicId: data.coverImagePublicId,
         media: data.media.map((m, i) => ({
           url: m.url,
+          publicId: m.publicId,
           type: m.type || 'image',
+          alt: m.alt || '',
+          order: i,
+        })),
+        magazinePages: data.magazinePages.map((m, i) => ({
+          url: m.url,
+          publicId: m.publicId,
+          type: 'image' as const,
           alt: m.alt || '',
           order: i,
         })),
@@ -138,14 +164,16 @@ export async function deleteCollection(id: string) {
       return { success: false, error: 'Collection not found' }
     }
 
-    // Best-effort cleanup of Cloudinary assets tied to this collection
-    try {
-      if (collection.coverImagePublicId) {
-        await cloudinary.uploader.destroy(collection.coverImagePublicId)
-      }
-    } catch {
-      // Non-fatal — proceed with DB deletion even if Cloudinary cleanup fails
-    }
+    // Best-effort cleanup of every Cloudinary asset tied to this collection
+    const publicIdsToDelete = [
+      collection.coverImagePublicId,
+      ...collection.media.map((m: any) => m.publicId),
+      ...collection.magazinePages.map((m: any) => m.publicId),
+    ].filter(Boolean)
+
+    await Promise.allSettled(
+      publicIdsToDelete.map((publicId) => cloudinary.uploader.destroy(publicId))
+    )
 
     await Collection.findByIdAndDelete(id)
 
@@ -157,19 +185,4 @@ export async function deleteCollection(id: string) {
     console.error('Delete collection error:', error)
     return { success: false, error: error.message || 'Failed to delete collection' }
   }
-}
-
-// ── Public storefront reads (no auth required) ──────────────
-
-export async function getActiveCollections() {
-  await connectDB()
-  const collections = await Collection.find({ isActive: true }).sort({ order: 1, createdAt: -1 })
-  return serialize(collections)
-}
-
-export async function getCollectionBySlug(slug: string) {
-  await connectDB()
-  const collection = await Collection.findOne({ slug, isActive: true })
-  if (!collection) return null
-  return serialize(collection)
 }

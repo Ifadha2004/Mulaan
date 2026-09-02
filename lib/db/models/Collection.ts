@@ -2,6 +2,7 @@ import mongoose, { Schema, Document, Model } from 'mongoose'
 
 export interface ICollectionMedia {
   url: string
+  publicId?: string
   type: 'image' | 'video'
   alt?: string
   order: number
@@ -13,7 +14,8 @@ export interface ICollection extends Document {
   description: string
   coverImage: string
   coverImagePublicId?: string
-  media: ICollectionMedia[] // Lookbook gallery
+  media: ICollectionMedia[]         // Lookbook gallery
+  magazinePages: ICollectionMedia[] // Digital magazine flipbook pages — optional, added anytime via edit
   launchDate?: Date
   isActive: boolean
   featured: boolean
@@ -25,6 +27,7 @@ export interface ICollection extends Document {
 const CollectionMediaSchema = new Schema<ICollectionMedia>(
   {
     url: { type: String, required: true },
+    publicId: { type: String },
     type: { type: String, enum: ['image', 'video'], default: 'image' },
     alt: { type: String },
     order: { type: Number, default: 0 },
@@ -60,6 +63,10 @@ const CollectionSchema = new Schema<ICollection>(
       type: String,
     },
     media: {
+      type: [CollectionMediaSchema],
+      default: [],
+    },
+    magazinePages: {
       type: [CollectionMediaSchema],
       default: [],
     },

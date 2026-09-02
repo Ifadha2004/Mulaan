@@ -17,6 +17,7 @@ interface CollectionDetailClientProps {
     description: string
     coverImage: string
     media: CollectionMedia[]
+    magazinePages: CollectionMedia[]
   }
 }
 
@@ -41,10 +42,11 @@ export default function CollectionDetailClient({ collection }: CollectionDetailC
     ...collection.media,
   ]
 
-  const magazinePages = Array.from(
-    { length: 11 },
-    (_, i) => `/magazines/${collection.slug}/page-${i + 1}.jpg`
-  )
+  // Only show the flipbook section if the admin has actually uploaded pages —
+  // many collections (like this one's 3rd) simply won't have a magazine yet,
+  // and that's expected, not a bug.
+  const hasMagazine = collection.magazinePages && collection.magazinePages.length > 0
+  const magazinePages = hasMagazine ? collection.magazinePages.map((p) => p.url) : []
 
   return (
     <div className="min-h-screen bg-[#FCFAF7]">
@@ -96,33 +98,35 @@ export default function CollectionDetailClient({ collection }: CollectionDetailC
         </div>
       </section>
 
-      {/* 3. THE MAGAZINE EXPERIENCE */}
-      <section className="py-32 bg-brand-green overflow-hidden">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="container-luxury mb-16 text-center space-y-4"
-        >
-          <p className="text-brand-gold text-[10px] tracking-[0.5em] uppercase">The Final Chapter</p>
-          <h2 className="heading-luxury text-3xl md:text-5xl text-brand-cream tracking-[0.2em] uppercase">
-            Digital Magazine
-          </h2>
-          <p className="text-brand-cream/40 text-[11px] tracking-[0.2em] italic max-w-lg mx-auto leading-relaxed px-4">
-            A deeper dive into the craftsmanship and story behind the {collection.name}.
-          </p>
-        </motion.div>
+      {/* 3. THE MAGAZINE EXPERIENCE — only renders if pages exist */}
+      {hasMagazine && (
+        <section className="py-32 bg-brand-green overflow-hidden">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="container-luxury mb-16 text-center space-y-4"
+          >
+            <p className="text-brand-gold text-[10px] tracking-[0.5em] uppercase">The Final Chapter</p>
+            <h2 className="heading-luxury text-3xl md:text-5xl text-brand-cream tracking-[0.2em] uppercase">
+              Digital Magazine
+            </h2>
+            <p className="text-brand-cream/40 text-[11px] tracking-[0.2em] italic max-w-lg mx-auto leading-relaxed px-4">
+              A deeper dive into the craftsmanship and story behind the {collection.name}.
+            </p>
+          </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.2 }}
-          viewport={{ once: true }}
-          className="flex justify-center"
-        >
-          <MagazineFlipbook pages={magazinePages} />
-        </motion.div>
-      </section>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="flex justify-center"
+          >
+            <MagazineFlipbook pages={magazinePages} />
+          </motion.div>
+        </section>
+      )}
 
       {/* CALL TO ACTION */}
       <section className="py-32 text-center">

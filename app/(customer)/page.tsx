@@ -154,7 +154,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 3. BRAND MARQUEE TICKER */}
+        {/* 3. BRAND MARQUEE TICKER
         <section className="relative bg-brand-green-800 py-10 overflow-hidden border-y border-brand-gold/20">
           <div className="flex whitespace-nowrap animate-marquee">
             {[0, 1].map((copy) => (
@@ -171,7 +171,7 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-        </section>
+        </section> */}
       </motion.main>
     </>
   )

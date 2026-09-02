@@ -18,6 +18,7 @@ interface CollectionFormProps {
     coverImage: string
     coverImagePublicId?: string
     media: { url: string; publicId?: string; type?: 'image' | 'video'; alt?: string }[]
+    magazinePages: { url: string; publicId?: string; type?: 'image' | 'video'; alt?: string }[]
     launchDate?: string
     isActive: boolean
     featured: boolean
@@ -40,6 +41,13 @@ export default function CollectionForm({ mode, collectionId, initialData }: Coll
   )
   const [media, setMedia] = useState<UploadedImage[]>(
     (initialData?.media || []).map((m) => ({
+      url: m.url,
+      publicId: m.publicId || '',
+      alt: m.alt || '',
+    }))
+  )
+  const [magazinePages, setMagazinePages] = useState<UploadedImage[]>(
+    (initialData?.magazinePages || []).map((m) => ({
       url: m.url,
       publicId: m.publicId || '',
       alt: m.alt || '',
@@ -78,6 +86,12 @@ export default function CollectionForm({ mode, collectionId, initialData }: Coll
       coverImage: cover[0].url,
       coverImagePublicId: cover[0].publicId,
       media: media.map((m) => ({ url: m.url, publicId: m.publicId, type: 'image' as const, alt: m.alt })),
+      magazinePages: magazinePages.map((m) => ({
+        url: m.url,
+        publicId: m.publicId,
+        type: 'image' as const,
+        alt: m.alt,
+      })),
       launchDate: launchDate || undefined,
       isActive,
       featured,
@@ -186,6 +200,29 @@ export default function CollectionForm({ mode, collectionId, initialData }: Coll
           folder="mulaan/collections/gallery"
           maxImages={10}
           label="Gallery Images"
+        />
+      </div>
+
+      {/* Digital Magazine */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="flex items-center gap-2 mb-1">
+          <h2 className="font-serif text-lg text-brand-green-800">Digital Magazine</h2>
+          <span className="px-2 py-0.5 text-[10px] font-medium bg-brand-gold/20 text-brand-gold-800 rounded uppercase tracking-wide">
+            Optional
+          </span>
+        </div>
+        <p className="text-sm text-gray-500 mb-4">
+          Upload page-by-page images for the flipbook experience shown on the collection page.
+          This is usually finished last — leave empty for now and come back to add it once the
+          collection wraps up. The flipbook section simply won't appear on the storefront until
+          pages are added here.
+        </p>
+        <ImageUploader
+          value={magazinePages}
+          onChange={setMagazinePages}
+          folder="mulaan/collections/magazine"
+          maxImages={40}
+          label="Magazine Pages"
         />
       </div>
 
