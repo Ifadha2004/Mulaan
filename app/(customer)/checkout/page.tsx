@@ -4,11 +4,12 @@ import { useState } from 'react'
 import { useCart } from '@/lib/hooks/useCart'
 import { MessageCircle, CheckCircle, RefreshCcw, ArrowRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { siteConfig } from '@/config/site'
 
 export default function CheckoutPage() {
   const { items, subtotal, isEmpty, clearCart } = useCart()
   const router = useRouter()
-  
+
   const [formData, setFormData] = useState({
     fullName: '',
     phone: '',
@@ -35,7 +36,7 @@ export default function CheckoutPage() {
     if (phoneDigits.length < 7 || phoneDigits.length > 15) newErrors.phone = "Please enter a valid contact number."
     if (formData.address.trim().length < 10) newErrors.address = "Please provide a more detailed address."
     if (!formData.city.trim()) newErrors.city = "City/Emirate is required."
-    
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -45,9 +46,18 @@ export default function CheckoutPage() {
     if (!validateForm()) return
 
     const whatsappNumber = "94760100965"
-    const itemsList = items.map(item => 
-      `• ${item.name} (${item.variant.size}/${item.variant.color}) x${item.quantity} - AED ${(item.price * item.quantity).toFixed(2)}`
-    ).join('%0A')
+
+    // Each item now includes a photo link (WhatsApp auto-previews the first
+    // image link it detects in the message) and a direct link to the product
+    // page, so the founder can identify + verify the exact piece at a glance.
+    const itemsList = items.map(item => {
+      const productUrl = `${siteConfig.url}/products/${item.slug}`
+      return (
+        `• ${item.name} (${item.variant.size}/${item.variant.color}) x${item.quantity} - AED ${(item.price * item.quantity).toFixed(2)}%0A` +
+        `  Photo: ${item.image}%0A` +
+        `  View: ${productUrl}`
+      )
+    }).join('%0A%0A')
 
     const message = `*NEW ORDER - MULAAN*%0A%0A` +
       `*Customer Details:*%0A` +
@@ -61,7 +71,7 @@ export default function CheckoutPage() {
 
     // Open WhatsApp in new tab
     window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank')
-    
+
     // Switch to confirmation mode
     setHasOpenedWhatsApp(true)
   }
@@ -93,7 +103,7 @@ export default function CheckoutPage() {
             <h2 className="heading-luxury text-[11px] tracking-[0.2em] text-brand-gold uppercase border-b border-brand-green/5 pb-2">
               Delivery Information
             </h2>
-            
+
             {!hasOpenedWhatsApp ? (
               <form onSubmit={handleInitialWhatsAppClick} className="space-y-8 animate-in fade-in duration-500">
                 <div className="space-y-8">
@@ -134,7 +144,7 @@ export default function CheckoutPage() {
                   </p>
                 </div>
 
-                <button 
+                <button
                   onClick={handleFinalizeSuccess}
                   className="w-full flex items-center justify-between bg-brand-gold text-brand-green px-8 py-5 text-[11px] tracking-[0.3em] uppercase font-bold shadow-xl hover:bg-brand-gold/90 transition-all border border-brand-gold"
                 >
@@ -142,7 +152,7 @@ export default function CheckoutPage() {
                   <CheckCircle className="w-4 h-4" />
                 </button>
 
-                <button 
+                <button
                   onClick={() => setHasOpenedWhatsApp(false)}
                   className="w-full flex items-center justify-center gap-2 text-[9px] tracking-widest text-gray-400 uppercase hover:text-brand-green transition-colors py-2"
                 >

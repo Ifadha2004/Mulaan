@@ -1,57 +1,79 @@
 'use client'
 
-import { IProductVariant } from '@/lib/db/models'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
+
+interface Variant {
+  size: string
+  color: string
+  stock: number
+  sku: string
+}
 
 interface VariantSelectorProps {
-  variants: IProductVariant[]
-  onVariantChange: (variant: IProductVariant) => void
+  variants: Variant[]
+  onVariantChange: (variant: Variant) => void
 }
+
+// Normalize for comparison/dedup: trim + lowercase. Prevents "Green" and
+// "green " (or any stray casing/whitespace from older data) being treated
+// as two different colors.
+const normalize = (val: string) => val.trim().toLowerCase()
 
 export default function VariantSelector({ variants, onVariantChange }: VariantSelectorProps) {
   const [selectedSize, setSelectedSize] = useState<string>('')
   const [selectedColor, setSelectedColor] = useState<string>('')
 
-  // Get unique sizes and colors
-  const sizes = [...new Set(variants.map(v => v.size))]
-  const colors = [...new Set(variants.map(v => v.color))]
+  // Unique sizes, in the order they first appear
+  const sizes = useMemo(() => {
+    const seen = new Set<string>()
+    const result: string[] = []
+    variants.forEach((v) => {
+      const key = normalize(v.size)
+      if (!seen.has(key)) {
+        seen.add(key)
+        result.push(v.size)
+      }
+    })
+    return result
+  }, [variants])
 
-  // Get available options based on selection
-  const getAvailableSizes = () => {
-    if (!selectedColor) return sizes
-    return sizes.filter(size => 
-      variants.some(v => v.size === size && v.color === selectedColor && v.stock > 0)
-    )
-  }
-
-  const getAvailableColors = () => {
-    if (!selectedSize) return colors
-    return colors.filter(color => 
-      variants.some(v => v.color === color && v.size === selectedSize && v.stock > 0)
-    )
-  }
+  // Colors available for the currently selected size only —
+  // deduplicated by normalized value, keeping the first-seen display casing
+  const availableColorsForSize = useMemo(() => {
+    if (!selectedSize) return []
+    const seen = new Map<string, string>() // normalized -> original display label
+    variants
+      .filter((v) => normalize(v.size) === normalize(selectedSize) && v.stock > 0)
+      .forEach((v) => {
+        const key = normalize(v.color)
+        if (!seen.has(key)) {
+          seen.set(key, v.color)
+        }
+      })
+    return Array.from(seen.values())
+  }, [variants, selectedSize])
 
   const handleSizeSelect = (size: string) => {
     setSelectedSize(size)
-    updateVariant(size, selectedColor)
+    // Reset color whenever size changes — the previously picked color
+    // might not exist in the new size, so force a clean re-selection
+    setSelectedColor('')
   }
 
   const handleColorSelect = (color: string) => {
     setSelectedColor(color)
-    updateVariant(selectedSize, color)
-  }
-
-  const updateVariant = (size: string, color: string) => {
-    if (size && color) {
-      const variant = variants.find(v => v.size === size && v.color === color)
-      if (variant) {
-        onVariantChange(variant)
-      }
+    const variant = variants.find(
+      (v) => normalize(v.size) === normalize(selectedSize) && normalize(v.color) === normalize(color)
+    )
+    if (variant) {
+      onVariantChange(variant)
     }
   }
 
   const getVariantStock = (size: string, color: string) => {
-    const variant = variants.find(v => v.size === size && v.color === color)
+    const variant = variants.find(
+      (v) => normalize(v.size) === normalize(size) && normalize(v.color) === normalize(color)
+    )
     return variant?.stock || 0
   }
 
@@ -69,20 +91,17 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
         </div>
         <div className="flex flex-wrap gap-2">
           {sizes.map((size) => {
-            const isAvailable = getAvailableSizes().includes(size)
-            const isSelected = selectedSize === size
+            const isSelected = normalize(selectedSize) === normalize(size)
             return (
               <button
                 key={size}
                 onClick={() => handleSizeSelect(size)}
-                disabled={!isAvailable}
                 className={`
                   px-6 py-3 border-2 font-medium transition-all
-                  ${isSelected
-                    ? 'border-brand-green-800 bg-brand-green-800 text-brand-cream-200'
-                    : isAvailable
-                    ? 'border-gray-300 hover:border-brand-green-800 text-brand-green-800'
-                    : 'border-gray-200 text-gray-400 cursor-not-allowed opacity-50'
+                  ${
+                    isSelected
+                      ? 'border-brand-green-800 bg-brand-green-800 text-brand-cream-200'
+                      : 'border-gray-300 hover:border-brand-green-800 text-brand-green-800'
                   }
                 `}
               >
@@ -93,53 +112,42 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
         </div>
       </div>
 
-      {/* Color Selector */}
-      <div>
-        <label className="block font-medium text-brand-green-800 mb-3">
-          Color {selectedColor && `(${selectedColor})`}
-        </label>
-        <div className="flex flex-wrap gap-3">
-          {colors.map((color) => {
-            const isAvailable = getAvailableColors().includes(color)
-            const isSelected = selectedColor === color
-            const stock = selectedSize ? getVariantStock(selectedSize, color) : 
-                         variants.filter(v => v.color === color).reduce((sum, v) => sum + v.stock, 0)
-            
-            return (
-              <button
-                key={color}
-                onClick={() => handleColorSelect(color)}
-                disabled={!isAvailable}
-                className={`
-                  relative group
-                  ${!isAvailable ? 'opacity-50 cursor-not-allowed' : ''}
-                `}
-              >
-                <div
-                  className={`
-                    w-12 h-12 rounded-full border-4 transition-all
-                    ${isSelected
-                      ? 'border-brand-green-800 scale-110'
-                      : isAvailable
-                      ? 'border-gray-300 hover:border-brand-gold'
-                      : 'border-gray-200'
-                    }
-                  `}
-                  style={{ backgroundColor: color.toLowerCase() }}
-                />
-                {!isAvailable && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-16 h-0.5 bg-red-500 rotate-45" />
-                  </div>
-                )}
-                <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-gray-600 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
-                  {color}
-                </span>
-              </button>
-            )
-          })}
+      {/* Color Selector — only appears once a size is chosen */}
+      {selectedSize && (
+        <div>
+          <label className="block font-medium text-brand-green-800 mb-3">
+            Color {selectedColor && `(${selectedColor})`}
+          </label>
+
+          {availableColorsForSize.length === 0 ? (
+            <p className="text-sm text-red-600">No colors currently in stock for size {selectedSize}.</p>
+          ) : (
+            <div className="flex flex-wrap gap-3">
+              {availableColorsForSize.map((color) => {
+                const isSelected = normalize(selectedColor) === normalize(color)
+                return (
+                  <button key={color} onClick={() => handleColorSelect(color)} className="relative group">
+                    <div
+                      className={`
+                        w-12 h-12 rounded-full border-4 transition-all
+                        ${
+                          isSelected
+                            ? 'border-brand-green-800 scale-110'
+                            : 'border-gray-300 hover:border-brand-gold'
+                        }
+                      `}
+                      style={{ backgroundColor: color.toLowerCase() }}
+                    />
+                    <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-gray-600 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                      {color}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          )}
         </div>
-      </div>
+      )}
 
       {/* Stock Indicator */}
       {selectedSize && selectedColor && (
@@ -149,9 +157,7 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
               ✓ In Stock ({getVariantStock(selectedSize, selectedColor)} available)
             </p>
           ) : (
-            <p className="text-red-600 font-medium">
-              ✗ Out of Stock
-            </p>
+            <p className="text-red-600 font-medium">✗ Out of Stock</p>
           )}
         </div>
       )}
