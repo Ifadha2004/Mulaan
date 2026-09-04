@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { X } from 'lucide-react'
 
 interface Variant {
   size: string
@@ -22,6 +23,7 @@ const normalize = (val: string) => val.trim().toLowerCase()
 export default function VariantSelector({ variants, onVariantChange }: VariantSelectorProps) {
   const [selectedSize, setSelectedSize] = useState<string>('')
   const [selectedColor, setSelectedColor] = useState<string>('')
+  const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false)
 
   // Unique sizes, in the order they first appear
   const sizes = useMemo(() => {
@@ -77,6 +79,23 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
     return variant?.stock || 0
   }
 
+  // Close on Escape key + lock background scroll while the modal is open
+  useEffect(() => {
+    if (!isSizeGuideOpen) return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsSizeGuideOpen(false)
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = ''
+    }
+  }, [isSizeGuideOpen])
+
   return (
     <div className="space-y-6">
       {/* Size Selector */}
@@ -85,7 +104,11 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
           <label className="block font-medium text-brand-green-800">
             Size {selectedSize && `(${selectedSize})`}
           </label>
-          <button className="text-sm text-brand-green-800 hover:text-brand-gold underline">
+          <button
+            type="button"
+            onClick={() => setIsSizeGuideOpen(true)}
+            className="text-sm text-brand-green-800 hover:text-brand-gold underline"
+          >
             Size Guide
           </button>
         </div>
@@ -159,6 +182,33 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
           ) : (
             <p className="text-red-600 font-medium">✗ Out of Stock</p>
           )}
+        </div>
+      )}
+
+      {/* Size Guide Modal */}
+      {isSizeGuideOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300"
+          onClick={() => setIsSizeGuideOpen(false)}
+        >
+          <div
+            className="relative max-w-lg w-full bg-brand-green rounded-lg overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setIsSizeGuideOpen(false)}
+              className="absolute top-4 right-4 z-10 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
+              aria-label="Close size guide"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <img
+              src="/images/size-guide.png"
+              alt="Mulaan Size Guide"
+              className="w-full h-auto"
+            />
+          </div>
         </div>
       )}
     </div>
