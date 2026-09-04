@@ -25,7 +25,8 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
   const [selectedColor, setSelectedColor] = useState<string>('')
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false)
 
-  // Unique sizes, in the order they first appear
+  // Unique sizes, sorted numerically when possible (UK sizing: 6, 8, 10...),
+  // falling back to alphabetical for any non-numeric sizes like "One Size"
   const sizes = useMemo(() => {
     const seen = new Set<string>()
     const result: string[] = []
@@ -36,7 +37,16 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
         result.push(v.size)
       }
     })
-    return result
+    return result.sort((a, b) => {
+      const numA = Number(a)
+      const numB = Number(b)
+      const aIsNum = !isNaN(numA)
+      const bIsNum = !isNaN(numB)
+      if (aIsNum && bIsNum) return numA - numB
+      if (aIsNum) return -1 // numeric sizes come before non-numeric ones
+      if (bIsNum) return 1
+      return a.localeCompare(b)
+    })
   }, [variants])
 
   // Colors available for the currently selected size only —

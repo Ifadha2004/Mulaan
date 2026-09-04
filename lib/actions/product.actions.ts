@@ -2,6 +2,7 @@
 
 import { connectDB } from '@/lib/db/mongodb'
 import Product from '@/lib/db/models/Product'
+import Collection from '@/lib/db/models/Collection'
 import cloudinary from '@/lib/cloudinary'
 import { requireAdminSession } from '@/lib/auth/session'
 import { revalidatePath } from 'next/cache'
@@ -42,9 +43,16 @@ function serialize<T>(doc: T): T {
 
 export async function getProducts() {
   await connectDB()
+
   const products = await Product.find()
-    .populate('collectionId', 'name slug')
+    .populate({
+      path: 'collectionId',
+      model: Collection,
+      select: 'name slug',
+    })
     .sort({ createdAt: -1 })
+    .lean()
+
   return serialize(products)
 }
 
