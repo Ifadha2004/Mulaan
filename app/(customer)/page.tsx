@@ -137,12 +137,12 @@ export default function HomePage() {
                   The Mulaan Duo
                 </span>
                 <h2 className="heading-luxury text-4xl md:text-6xl leading-[1.1]">
-                  Crafted by Kinship, <br /> 
-                  <span className="italic">Defined by Elegance.</span>
+                  Two cousins, <br /> 
+                  <span className="italic">One obsession.</span>
                 </h2>
               </div>
               <p className="text-sm md:text-base leading-relaxed text-brand-green/80 max-w-md font-light">
-                Two cousins, one vision. We invite you into the world of Mulaan—where every collection is a digital magazine of our shared journey.
+                Every collection we create starts with one question, will she feel confident wearing this? We hope you feel that in every piece.
               </p>
               <Link 
                 href="/about" 

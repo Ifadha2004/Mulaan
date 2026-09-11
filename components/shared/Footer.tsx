@@ -160,11 +160,11 @@ export default function Footer() {
         {/* Brand */}
         <div className="space-y-6 md:col-span-4">
           <div className="flex items-center gap-4">
-            <div className="flex h-10 w-10 items-center justify-center border border-brand-gold/30">
+            {/* <div className="flex h-10 w-10 items-center justify-center border border-brand-gold/30">
               <span className="text-sm font-light text-brand-gold">
                 M
               </span>
-            </div>
+            </div> */}
 
             <span
               className="font-serif text-2xl italic uppercase tracking-[0.2em] text-brand-cream"
@@ -175,9 +175,10 @@ export default function Footer() {
           </div>
 
           <p className="max-w-xs text-[11px] uppercase leading-relaxed tracking-[0.2em] text-brand-cream/40">
-            © {currentYear} Mulaan Studios.
+            © estd 2025.
             <br />
-            Crafted for those who define elegance.
+              By women who dare,
+              for women who define.
           </p>
         </div>
 
