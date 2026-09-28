@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Plus, Star, Calendar } from 'lucide-react'
 import { getCollections } from '@/lib/actions/collection.actions'
 import DeleteCollectionButton from '@/components/admin/collections/DeleteCollectionButton'
+import AnnounceLaunchButton from '@/components/admin/collections/AnnounceLaunchButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -100,6 +101,16 @@ export default async function AdminCollectionsPage() {
                     name={collection.name}
                   />
                 </div>
+                {collection.isActive && (
+                  <div className="pt-2">
+                    <AnnounceLaunchButton
+                      collectionId={collection._id}
+                      collectionName={collection.name}
+                      launchEmailSent={collection.launchEmailSent}
+                      launchEmailSentAt={collection.launchEmailSentAt}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           ))}
