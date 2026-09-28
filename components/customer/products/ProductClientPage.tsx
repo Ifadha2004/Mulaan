@@ -63,7 +63,7 @@ export default function ProductClientPage({ initialProduct }: { initialProduct: 
               </h1>
               <div className="flex items-baseline gap-3">
                 <span className="text-3xl font-light text-brand-green-800">
-                  AED {product.price.toFixed(2)}
+                  LKR {product.price.toFixed(2)}
                 </span>
               </div>
             </header>
@@ -172,7 +172,7 @@ export default function ProductClientPage({ initialProduct }: { initialProduct: 
                 <div className="p-3 bg-white rounded-full group-hover:bg-brand-gold/10 transition-colors">
                   <Truck className="w-5 h-5 text-brand-gold" />
                 </div>
-                <span className="text-[10px] tracking-widest uppercase text-gray-500">Free Delivery Over AED 500</span>
+                <span className="text-[10px] tracking-widest uppercase text-gray-500">Islandwide Delivery Available</span>
               </div>
               <div className="flex items-center gap-4 group">
                 <div className="p-3 bg-white rounded-full group-hover:bg-brand-gold/10 transition-colors">

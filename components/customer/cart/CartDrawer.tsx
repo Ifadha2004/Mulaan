@@ -73,7 +73,7 @@ export default function CartDrawer() {
                         <span className="text-[10px] font-medium">{item.quantity}</span>
                         <button onClick={() => updateQuantity(item.productId, item.variant.sku, item.quantity + 1)} className="text-brand-green/30 hover:text-brand-green">+</button>
                       </div>
-                      <p className="text-[10px] tracking-widest text-brand-green">AED {(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="text-[10px] tracking-widest text-brand-green">LKR {(item.price * item.quantity).toFixed(2)}</p>
                     </div>
                   </div>
                 </div>
@@ -87,7 +87,7 @@ export default function CartDrawer() {
           <div className="p-8 bg-white border-t border-brand-green/5 space-y-4">
             <div className="flex justify-between items-baseline mb-2">
               <span className="heading-luxury text-[10px] tracking-[0.3em] uppercase">Total Selection</span>
-              <span className="text-lg tracking-widest text-brand-green">AED {subtotal.toFixed(2)}</span>
+              <span className="text-lg tracking-widest text-brand-green">LKR {subtotal.toFixed(2)}</span>
             </div>
             <Link
               href="/cart"

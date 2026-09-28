@@ -108,7 +108,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </h3>
           
           <p className="text-sm font-light text-brand-green/70 tracking-widest">
-            AED {product.price.toFixed(2)}
+            LKR {product.price.toFixed(2)}
           </p>
 
           {/* Color Selection Dots */}

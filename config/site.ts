@@ -7,7 +7,7 @@ export const siteConfig = {
     instagram: 'https://instagram.com/mulaan.lk',
     whatsapp: `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`,
   },
-  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '971XXXXXXXXX',
+  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '94760100965',
 }
 
 export type SiteConfig = typeof siteConfig

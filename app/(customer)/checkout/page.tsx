@@ -35,7 +35,7 @@ export default function CheckoutPage() {
     const phoneDigits = formData.phone.replace(/\D/g, '')
     if (phoneDigits.length < 7 || phoneDigits.length > 15) newErrors.phone = "Please enter a valid contact number."
     if (formData.address.trim().length < 10) newErrors.address = "Please provide a more detailed address."
-    if (!formData.city.trim()) newErrors.city = "City/Emirate is required."
+    if (!formData.city.trim()) newErrors.city = "City or district is required."
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -53,7 +53,7 @@ export default function CheckoutPage() {
     const itemsList = items.map(item => {
       const productUrl = `${siteConfig.url}/products/${item.slug}`
       return (
-        `• ${item.name} (${item.variant.size}/${item.variant.color}) x${item.quantity} - AED ${(item.price * item.quantity).toFixed(2)}%0A` +
+        `• ${item.name} (${item.variant.size}/${item.variant.color}) x${item.quantity} - LKR ${(item.price * item.quantity).toFixed(2)}%0A` +
         `  Photo: ${item.image}%0A` +
         `  View: ${productUrl}`
       )
@@ -65,7 +65,7 @@ export default function CheckoutPage() {
       `Phone: ${formData.phone.trim()}%0A` +
       `Address: ${formData.address.trim()}, ${formData.city.trim()}%0A%0A` +
       `*Order Summary:*%0A${itemsList}%0A%0A` +
-      `*Total Amount: AED ${subtotal.toFixed(2)}*%0A%0A` +
+      `*Total Amount: LKR ${subtotal.toFixed(2)}*%0A%0A` +
       `*Notes:* ${formData.notes.trim() || 'None'}%0A%0A` +
       `_Please confirm my order and share payment details._`
 
@@ -123,7 +123,7 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="relative">
-                    <input name="city" type="text" placeholder="CITY / EMIRATE" value={formData.city} onChange={handleInputChange} className={`w-full bg-transparent border-b ${errors.city ? 'border-red-300' : 'border-brand-green/10'} py-3 text-[11px] tracking-widest focus:border-brand-gold transition-colors outline-none uppercase font-light`} />
+                    <input name="city" type="text" placeholder="CITY / DISTRICT" value={formData.city} onChange={handleInputChange} className={`w-full bg-transparent border-b ${errors.city ? 'border-red-300' : 'border-brand-green/10'} py-3 text-[11px] tracking-widest focus:border-brand-gold transition-colors outline-none uppercase font-light`} />
                     {errors.city && <p className="text-[9px] text-red-500 mt-1 tracking-wider uppercase font-medium">{errors.city}</p>}
                   </div>
 
@@ -175,13 +175,13 @@ export default function CheckoutPage() {
                     <span className="text-brand-green block mb-1">{item.name}</span>
                     <span className="text-gray-400 block text-[9px] font-light">{item.variant.size} • {item.variant.color} • QTY: {item.quantity}</span>
                   </div>
-                  <span className="text-brand-green font-medium">AED {(item.price * item.quantity).toFixed(2)}</span>
+                  <span className="text-brand-green font-medium">LKR {(item.price * item.quantity).toFixed(2)}</span>
                 </div>
               ))}
             </div>
             <div className="pt-8 border-t border-brand-green/5 flex justify-between items-baseline">
               <span className="heading-luxury text-[10px] tracking-[0.4em] uppercase text-gray-400 font-light">Total</span>
-              <span className="text-2xl tracking-[0.1em] text-brand-green font-medium">AED {subtotal.toFixed(2)}</span>
+              <span className="text-2xl tracking-[0.1em] text-brand-green font-medium">LKR {subtotal.toFixed(2)}</span>
             </div>
           </div>
         </div>

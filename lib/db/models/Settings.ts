@@ -8,7 +8,7 @@ export interface IFounderConfig {
 
 export interface ISettings extends Document {
   businessName: string
-  currency: string // "AED"
+  currency: string // "LKR"
   founders: IFounderConfig[]
   paymentMethods: string[]
   drops: string[] // ["Drop 01", "Drop 02", "Drop 03"]
@@ -39,7 +39,7 @@ const SettingsSchema = new Schema<ISettings>(
     },
     currency: {
       type: String,
-      default: 'AED',
+      default: 'LKR',
     },
     founders: {
       type: [FounderConfigSchema],

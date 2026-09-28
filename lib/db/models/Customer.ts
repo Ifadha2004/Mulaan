@@ -49,7 +49,7 @@ const CustomerSchema = new Schema<ICustomer>(
     },
     country: {
       type: String,
-      default: 'UAE',
+      default: 'Sri Lanka',
     },
     totalOrders: {
       type: Number,

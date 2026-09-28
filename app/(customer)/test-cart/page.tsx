@@ -37,7 +37,7 @@
 //           <h2 className="text-2xl font-semibold mb-4">Mock Product</h2>
 //           <div className="space-y-3">
 //             <p><strong>Name:</strong> {mockProduct.name}</p>
-//             <p><strong>Price:</strong> AED {mockProduct.price}</p>
+//             <p><strong>Price:</strong> LKR {mockProduct.price}</p>
 //             <p><strong>Size:</strong> {mockVariant.size}</p>
 //             <p><strong>Color:</strong> {mockVariant.color}</p>
 //             <p><strong>Stock:</strong> {mockVariant.stock}</p>
@@ -80,7 +80,7 @@
 //                         {item.variant.size} - {item.variant.color}
 //                       </p>
 //                       <p className="text-sm font-medium" style={{ color: 'var(--brand-green)' }}>
-//                         AED {item.price}
+//                         LKR {item.price}
 //                       </p>
 //                     </div>
 //                     <button
@@ -107,7 +107,7 @@
 //                       +
 //                     </button>
 //                     <span className="ml-auto font-medium">
-//                       AED {(item.price * item.quantity).toFixed(2)}
+//                       LKR {(item.price * item.quantity).toFixed(2)}
 //                     </span>
 //                   </div>
 //                 </div>
@@ -117,7 +117,7 @@
 //               <div className="pt-4 space-y-2">
 //                 <div className="flex justify-between text-lg font-semibold">
 //                   <span>Subtotal:</span>
-//                   <span style={{ color: 'var(--brand-green)' }}>AED {subtotal.toFixed(2)}</span>
+//                   <span style={{ color: 'var(--brand-green)' }}>LKR {subtotal.toFixed(2)}</span>
 //                 </div>
 //               </div>
 
@@ -187,7 +187,7 @@ export default function TestCartPage() {
               <div className="flex justify-between py-3 border-b" style={{ borderColor: 'var(--brand-gold)' }}>
                 <span className="text-gray-600">Price</span>
                 <span className="font-semibold" style={{ color: 'var(--brand-green)' }}>
-                  AED {mockProduct.price}
+                  LKR {mockProduct.price}
                 </span>
               </div>
               <div className="flex justify-between py-3 border-b border-gray-200">
@@ -266,7 +266,7 @@ export default function TestCartPage() {
                           Size: {item.variant.size} • Color: {item.variant.color}
                         </p>
                         <p className="text-sm font-medium" style={{ color: 'var(--brand-gold)' }}>
-                          AED {item.price} each
+                          LKR {item.price} each
                         </p>
                       </div>
                       <button
@@ -299,7 +299,7 @@ export default function TestCartPage() {
                       <div className="text-right">
                         <p className="text-sm text-gray-500 mb-1">Subtotal</p>
                         <p className="text-xl font-bold" style={{ color: 'var(--brand-green)' }}>
-                          AED {(item.price * item.quantity).toFixed(2)}
+                          LKR {(item.price * item.quantity).toFixed(2)}
                         </p>
                       </div>
                     </div>
@@ -310,7 +310,7 @@ export default function TestCartPage() {
                 <div className="pt-6 space-y-4">
                   <div className="flex justify-between items-center text-lg">
                     <span className="text-gray-600">Subtotal</span>
-                    <span className="font-semibold">AED {subtotal.toFixed(2)}</span>
+                    <span className="font-semibold">LKR {subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm text-gray-500">
                     <span>Shipping</span>
@@ -323,7 +323,7 @@ export default function TestCartPage() {
                   <div className="flex justify-between items-center text-2xl">
                     <span className="font-semibold">Total</span>
                     <span className="font-bold" style={{ color: 'var(--brand-green)' }}>
-                      AED {subtotal.toFixed(2)}
+                      LKR {subtotal.toFixed(2)}
                     </span>
                   </div>
                 </div>

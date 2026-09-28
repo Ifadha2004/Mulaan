@@ -102,7 +102,7 @@ export default function CartPage() {
                       <div className="text-right">
                         <p className="text-[10px] tracking-[0.1em] text-gray-300 mb-1 uppercase">Total</p>
                         <p className="text-sm font-medium tracking-widest text-brand-green">
-                          AED {(item.price * item.quantity).toFixed(2)}
+                          LKR {(item.price * item.quantity).toFixed(2)}
                         </p>
                       </div>
                     </div>
@@ -121,7 +121,7 @@ export default function CartPage() {
                 <div className="space-y-6 mb-10">
                   <div className="flex justify-between text-[11px] tracking-widest uppercase text-gray-400 font-light">
                     <span>Subtotal</span>
-                    <span className="text-brand-green">AED {subtotal.toFixed(2)}</span>
+                    <span className="text-brand-green">LKR {subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-[11px] tracking-widest uppercase text-gray-400 font-light">
                     <span>Shipping</span>
@@ -129,7 +129,7 @@ export default function CartPage() {
                   </div>
                   <div className="pt-6 border-t border-brand-green/5 flex justify-between items-baseline">
                     <span className="heading-luxury text-[10px] tracking-[0.3em] uppercase">Total</span>
-                    <span className="text-xl tracking-widest text-brand-green font-medium">AED {subtotal.toFixed(2)}</span>
+                    <span className="text-xl tracking-widest text-brand-green font-medium">LKR {subtotal.toFixed(2)}</span>
                   </div>
                 </div>
 

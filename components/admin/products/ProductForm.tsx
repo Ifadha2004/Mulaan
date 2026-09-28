@@ -181,7 +181,7 @@ export default function ProductForm({ mode, productId, collections, initialData 
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Price (AED) *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Price (LKR) *</label>
             <input
               type="number"
               min={0}

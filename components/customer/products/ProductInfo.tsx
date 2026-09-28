@@ -13,7 +13,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
       {/* Header Info - Moved Price/Name focus here if not already handled */}
       <div className="border-b border-brand-green/10 pb-8">
         <h1 className="heading-display text-3xl mb-2 tracking-widest">{product.name}</h1>
-        <p className="text-2xl font-light text-brand-green italic">AED {product.price.toFixed(2)}</p>
+        <p className="text-2xl font-light text-brand-green italic">LKR {product.price.toFixed(2)}</p>
       </div>
 
       {/* Description Section */}
@@ -57,7 +57,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
       <div className="grid grid-cols-2 gap-y-10 gap-x-6 pt-6">
         {[
           { icon: Package, title: "Premium Quality", desc: "Sourced from the finest mills" },
-          { icon: Truck, title: "Dubai Express", desc: "Complimentary local delivery" },
+          { icon: Truck, title: "Islandwide Delivery", desc: "Available across Sri Lanka" },
           { icon: ShieldCheck, title: "Authenticity", desc: "100% Genuine Mulaan Garment" },
           { icon: Clock, title: "Limited Run", desc: "Exclusive small-batch production" }
         ].map((item, i) => (
@@ -74,7 +74,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
         <div className="mt-8 p-6 border border-brand-gold/30 bg-brand-cream/50 text-center">
           <p className="heading-luxury text-[10px] uppercase tracking-[0.2em] text-brand-green mb-2">Exclusive Pre-Order</p>
           <p className="text-[11px] text-gray-500 font-light">
-            Shipping expected by {new Date(product.preOrderEnd!).toLocaleDateString('en-AE', { month: 'long', day: 'numeric' })}
+            Shipping expected by {new Date(product.preOrderEnd!).toLocaleDateString('en-LK', { month: 'long', day: 'numeric' })}
           </p>
         </div>
       )}

@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     "abaya",
     "hijab fashion",
     "muslim clothing",
-    "UAE fashion",
+    "Sri Lankan fashion",
     "luxury modest wear",
     "elegant hijab",
   ],

@@ -52,7 +52,7 @@ export default function ProductDetailV2Client({ product }: { product: any }) {
               </h1>
               <div className="flex items-baseline gap-3">
                 <span className="text-3xl font-light text-brand-green-800">
-                  AED {product.price.toFixed(2)}
+                  LKR {product.price.toFixed(2)}
                 </span>
               </div>
             </header>
@@ -171,7 +171,7 @@ export default function ProductDetailV2Client({ product }: { product: any }) {
                   <Truck className="w-5 h-5 text-brand-gold" />
                 </div>
                 <span className="text-[10px] tracking-widest uppercase text-gray-500">
-                  Free Delivery Over AED 500
+                  Islandwide Delivery Available
                 </span>
               </div>
               <div className="flex items-center gap-4 group">

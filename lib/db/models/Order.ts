@@ -117,7 +117,7 @@ const OrderSchema = new Schema<IOrder>(
     },
     country: {
       type: String,
-      default: 'UAE',
+      default: 'Sri Lanka',
     },
     items: {
       type: [OrderItemSchema],

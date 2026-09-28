@@ -96,7 +96,7 @@ export default async function AdminProductsPage() {
                       {product.collectionId?.name || '—'}
                     </td>
                     <td className="px-4 py-3 text-gray-800 font-medium">
-                      AED {product.price.toFixed(2)}
+                      LKR {product.price.toFixed(2)}
                     </td>
                     <td className="px-4 py-3">
                       <span className={totalStock <= 5 ? 'text-red-600 font-medium' : 'text-gray-600'}>
