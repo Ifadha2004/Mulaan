@@ -221,7 +221,6 @@ const CollectionSchema = new Schema<ICollection>(
   }
 )
 
-// Storefront collection ordering.
 CollectionSchema.index({ isActive: 1, order: 1 })
 
 const Collection: Model<ICollection> =
