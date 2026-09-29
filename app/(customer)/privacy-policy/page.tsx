@@ -37,8 +37,7 @@ export default function PrivacyPolicyPage() {
             </h2>
 
             <p>
-              We collect information you provide when placing an order or
-              contacting us, including your name, email address, phone
+              We collect information you provide when placing an order, including your name, email address, phone
               number, and delivery address.
             </p>
           </section>
