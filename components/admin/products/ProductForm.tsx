@@ -756,6 +756,7 @@ export default function ProductForm({
         <ImageUploader
           value={images}
           onChange={setImages}
+          folder="mulaan/products"
         />
       </section>
 
