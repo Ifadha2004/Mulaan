@@ -19,7 +19,8 @@ export default function Footer() {
   const footerLinks = {
     pages: [
       { name: 'Gallery', href: '/collections' },
-      { name: 'The Studio', href: '/about' },
+      { name: 'Shop', href: '/products' },
+      { name: 'Sale', href: '/sale' },
       { name: 'Journal', href: '/journal' },
     ],
     socials: [
