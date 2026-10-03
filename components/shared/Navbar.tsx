@@ -24,9 +24,9 @@ export default function Navbar() {
   const textColor = isScrolled || isHomePage ? 'text-white' : 'text-brand-green'
   const logoColor = isScrolled || isHomePage ? 'text-brand-gold' : 'text-brand-green'
   const navLinks = [
-    { name: 'Home', href: '/' }, { name: 'Collections', href: '/collections' },
+    { name: 'Home', href: '/' }, { name: 'Gallery', href: '/collections' },
     { name: 'Products', href: '/products' }, { name: 'Sale', href: '/sale', accent: true },
-    { name: 'About', href: '/about' },
+    // { name: 'About', href: '/about' },
   ]
 
   return <>

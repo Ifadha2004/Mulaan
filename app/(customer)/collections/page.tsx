@@ -21,7 +21,7 @@ export default async function CollectionsPage() {
           </p>
 
           <h1 className="heading-luxury text-4xl uppercase tracking-[0.24em] text-brand-green md:text-6xl lg:text-7xl">
-            The Collections
+            The Digital Magazine
           </h1>
 
           <div className="mx-auto my-7 h-px w-16 bg-brand-gold" />
