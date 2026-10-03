@@ -20,6 +20,7 @@ export interface IProduct extends Document {
   slug: string
   description: string
   price: number
+  displayOrder: number
   isOnSale: boolean
   salePrice?: number
   saleLabel?: string
@@ -60,6 +61,7 @@ const ProductSchema = new Schema<IProduct>(
     slug: { type: String, required: true, unique: true, lowercase: true },
     description: { type: String, required: [true, 'Product description is required'], maxlength: 2000 },
     price: { type: Number, required: [true, 'Product price is required'], min: 0 },
+    displayOrder: { type: Number, min: 1, default: 999 },
     isOnSale: { type: Boolean, default: false },
     salePrice: { type: Number, min: 0 },
     saleLabel: { type: String, trim: true, maxlength: 60 },
@@ -86,7 +88,7 @@ const ProductSchema = new Schema<IProduct>(
   { timestamps: true }
 )
 
-ProductSchema.index({ status: 1, createdAt: -1 })
+ProductSchema.index({ status: 1, displayOrder: 1, createdAt: -1 })
 ProductSchema.index({ collectionId: 1 })
 ProductSchema.index({ 'variants.sku': 1 }, { unique: true })
 ProductSchema.index({ isPreOrder: 1, preOrderEnd: 1 })

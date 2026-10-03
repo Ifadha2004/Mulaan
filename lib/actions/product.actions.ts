@@ -15,6 +15,7 @@ interface ProductFormData {
   slug: string
   description: string
   price: number
+  displayOrder: number
   isOnSale: boolean
   salePrice?: number
   saleLabel?: string
@@ -55,6 +56,13 @@ function validateSale(data: ProductFormData) {
 function validateProduct(data: ProductFormData) {
   if (!data.name.trim() || !data.slug.trim() || !data.description.trim()) return 'Name, slug, and description are required'
   if (!Number.isFinite(data.price) || data.price <= 0) return 'Price must be greater than zero'
+  if (
+  !Number.isInteger(data.displayOrder) ||
+  data.displayOrder < 1 ||
+  data.displayOrder > 9999
+  ) {
+    return 'Display order must be a whole number between 1 and 9999'
+  }
   if (data.images.length === 0) return 'At least one product image is required'
   if (data.variants.length === 0) return 'At least one size/color variant is required'
   if (data.variants.some((variant) => !variant.color.trim() || !variant.sku.trim() || variant.stock < 0)) {
@@ -70,6 +78,7 @@ function productData(data: ProductFormData) {
     slug: data.slug.trim().toLowerCase(),
     description: data.description.trim(),
     price: data.price,
+    displayOrder: data.displayOrder,
     isOnSale: data.isOnSale,
     ...(data.isOnSale && {
       salePrice: data.salePrice,
@@ -107,7 +116,7 @@ export async function getProducts() {
   await connectDB()
   const products = await Product.find()
     .populate({ path: 'collectionId', model: Collection, select: 'name slug' })
-    .sort({ createdAt: -1 })
+    .sort({ displayOrder: 1, createdAt: -1 })
     .lean()
   return serialize(products)
 }
@@ -126,7 +135,13 @@ export async function getProductBySlug(slug: string) {
 
 export async function getActiveProducts() {
   await connectDB()
-  const products = await Product.find({ status: { $ne: 'archived' } }).sort({ createdAt: -1 }).lean()
+
+  const products = await Product.find({
+    status: { $ne: 'archived' },
+  })
+    .sort({ displayOrder: 1, createdAt: -1 })
+    .lean()
+
   return serialize(products)
 }
 
@@ -144,7 +159,11 @@ export async function getSaleProducts() {
     ],
   })
     .populate({ path: 'collectionId', model: Collection, select: 'name slug' })
-    .sort({ saleEnd: 1, createdAt: -1 })
+    .sort({
+      displayOrder: 1,
+      saleEnd: 1,
+      createdAt: -1,
+    })
     .lean()
   return serialize(products)
 }
