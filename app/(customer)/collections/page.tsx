@@ -73,15 +73,9 @@ export default async function CollectionsPage() {
 
                       {/* Bottom magazine information */}
                       <div className="absolute inset-x-6 bottom-6 flex items-end justify-between gap-6 md:inset-x-8 md:bottom-8">
-                        <div>
-                          <p className="mb-3 text-[8px] uppercase tracking-[0.45em] text-white/60">
-                            Mulaan Collection
-                          </p>
-
-                          <h2 className="heading-luxury text-2xl uppercase tracking-[0.18em] text-white md:text-3xl">
-                            {collection.name}
-                          </h2>
-                        </div>
+                        <p className="text-[8px] uppercase tracking-[0.45em] text-white/70">
+                          Mulaan Collection
+                        </p>
 
                         <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-md transition-all duration-500 group-hover:rotate-45 group-hover:border-brand-gold group-hover:bg-brand-gold group-hover:text-brand-green">
                           <ArrowUpRight className="h-4 w-4" />
@@ -92,13 +86,13 @@ export default async function CollectionsPage() {
                       <div className="pointer-events-none absolute inset-4 border border-white/0 transition-all duration-700 group-hover:inset-6 group-hover:border-white/30" />
                     </div>
 
-                    {/* Short information only—description removed */}
-                    <footer className="mt-6 flex items-center justify-between border-b border-brand-green/10 pb-5">
-                      <span className="text-[9px] uppercase tracking-[0.35em] text-gray-400">
-                        Digital Lookbook
-                      </span>
+                    {/* Collection name and edition link */}
+                    <footer className="mt-6 flex items-center justify-between gap-6 border-b border-brand-green/10 pb-5">
+                      <h2 className="heading-luxury text-base uppercase tracking-[0.22em] text-brand-gold transition-colors duration-500 group-hover:text-brand-green md:text-lg">
+                        {collection.name}
+                      </h2>
 
-                      <span className="text-[9px] uppercase tracking-[0.35em] text-brand-green transition-colors duration-500 group-hover:text-brand-gold">
+                      <span className="shrink-0 text-[9px] uppercase tracking-[0.35em] text-brand-green transition-colors duration-500 group-hover:text-brand-gold">
                         Open Edition
                       </span>
                     </footer>
