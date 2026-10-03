@@ -18,7 +18,7 @@ export default function Footer() {
 
   const footerLinks = {
     pages: [
-      { name: 'Collections', href: '/collections' },
+      { name: 'Gallery', href: '/collections' },
       { name: 'The Studio', href: '/about' },
       { name: 'Journal', href: '/journal' },
     ],
