@@ -1,75 +1,122 @@
 import Link from 'next/link'
+import { ArrowUpRight } from 'lucide-react'
 import { getCollections } from '@/lib/actions/collection.actions'
 
 export const dynamic = 'force-dynamic'
 
 export default async function CollectionsPage() {
   const allCollections = await getCollections()
-  const collections = allCollections.filter((c: any) => c.isActive)
+
+  const collections = allCollections.filter(
+    (collection: any) => collection.isActive
+  )
 
   return (
-    <div className="min-h-screen bg-[#FCFAF7] py-24 lg:py-32">
-      <div className="container-luxury space-y-24">
-        {/* Header Section */}
-        <div className="text-center space-y-6">
-          <h1 className="heading-luxury text-4xl md:text-6xl tracking-[0.3em] text-brand-green uppercase">
+    <main className="min-h-screen overflow-hidden bg-[#FCFAF7] pb-24 pt-28 lg:pb-32 lg:pt-36">
+      <div className="container-luxury">
+        {/* Editorial heading */}
+        <header className="mx-auto mb-20 max-w-4xl text-center lg:mb-28">
+          <p className="mb-6 text-[9px] uppercase tracking-[0.6em] text-brand-gold">
+            Mulaan Archive
+          </p>
+
+          <h1 className="heading-luxury text-4xl uppercase tracking-[0.24em] text-brand-green md:text-6xl lg:text-7xl">
             The Collections
           </h1>
-          <div className="w-16 h-[1px] bg-brand-gold mx-auto" />
-          <p className="text-gray-400 font-light tracking-[0.2em] italic text-xs uppercase">
-            The Mulaan Journey
+
+          <div className="mx-auto my-7 h-px w-16 bg-brand-gold" />
+
+          <p className="text-[10px] font-light uppercase tracking-[0.35em] text-gray-400">
+            Stories told through form, fabric and movement
           </p>
-        </div>
+        </header>
 
         {collections.length === 0 ? (
-          <p className="text-center text-gray-400 text-sm tracking-widest uppercase">
-            New collections coming soon.
-          </p>
+          <section className="py-24 text-center">
+            <p className="text-sm uppercase tracking-[0.3em] text-gray-400">
+              New collections coming soon.
+            </p>
+          </section>
         ) : (
-          /* Symmetrical Grid */
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-20 lg:gap-x-20">
-            {collections.map((col: any) => (
-              <Link key={col.slug} href={`/collections/${col.slug}`} className="group block">
-                {/* Image Container with Fixed 3:4 Aspect Ratio */}
-                <div className="relative aspect-[3/4] overflow-hidden bg-gray-100 shadow-sm transition-all duration-700 group-hover:shadow-2xl">
-                  <img
-                    src={col.coverImage}
-                    className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"
-                    alt={col.name}
-                  />
+          <section className="grid grid-cols-1 gap-x-10 gap-y-20 md:grid-cols-2 lg:gap-x-16 lg:gap-y-28">
+            {collections.map((collection: any, index: number) => {
+              const editionNumber = String(index + 1).padStart(2, '0')
 
-                  {/* Minimalist Glassmorphism Overlay */}
-                  <div className="absolute inset-0 bg-brand-green/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 flex items-center justify-center">
-                    <div className="backdrop-blur-sm bg-white/10 border border-white/30 px-8 py-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700">
-                      <span className="text-white text-[10px] tracking-[0.5em] uppercase font-light">
-                        Explore Album
-                      </span>
+              return (
+                <Link
+                  key={collection.slug}
+                  href={`/collections/${collection.slug}`}
+                  className="group block"
+                >
+                  {/* Magazine cover */}
+                  <article className="relative">
+                    <div className="relative aspect-[4/5] overflow-hidden bg-[#EEEAE3]">
+                      <img
+                        src={collection.coverImage}
+                        alt={collection.name}
+                        className="h-full w-full object-cover transition-transform duration-[1600ms] ease-out group-hover:scale-[1.045]"
+                      />
+
+                      {/* Editorial gradient */}
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-brand-green/55 via-transparent to-black/10 opacity-70 transition-opacity duration-700 group-hover:opacity-90" />
+
+                      {/* Edition number */}
+                      <div className="absolute left-6 top-6 flex items-center gap-3 md:left-8 md:top-8">
+                        <span className="text-[9px] uppercase tracking-[0.4em] text-white/75">
+                          Edition
+                        </span>
+
+                        <span className="text-xs font-light tracking-[0.2em] text-white">
+                          {editionNumber}
+                        </span>
+                      </div>
+
+                      {/* Bottom magazine information */}
+                      <div className="absolute inset-x-6 bottom-6 flex items-end justify-between gap-6 md:inset-x-8 md:bottom-8">
+                        <div>
+                          <p className="mb-3 text-[8px] uppercase tracking-[0.45em] text-white/60">
+                            Mulaan Collection
+                          </p>
+
+                          <h2 className="heading-luxury text-2xl uppercase tracking-[0.18em] text-white md:text-3xl">
+                            {collection.name}
+                          </h2>
+                        </div>
+
+                        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-md transition-all duration-500 group-hover:rotate-45 group-hover:border-brand-gold group-hover:bg-brand-gold group-hover:text-brand-green">
+                          <ArrowUpRight className="h-4 w-4" />
+                        </span>
+                      </div>
+
+                      {/* Hover frame */}
+                      <div className="pointer-events-none absolute inset-4 border border-white/0 transition-all duration-700 group-hover:inset-6 group-hover:border-white/30" />
                     </div>
-                  </div>
-                </div>
 
-                {/* Text Content - Aligned Center */}
-                <div className="mt-10 text-center space-y-3">
-                  <h2 className="heading-luxury text-xl tracking-[0.25em] text-brand-green-800 transition-colors duration-500 group-hover:text-brand-gold uppercase">
-                    {col.name}
-                  </h2>
-                  <div className="w-8 h-[1px] bg-brand-gold/30 mx-auto transition-all duration-500 group-hover:w-16" />
-                  <p className="text-gray-500 font-light text-[11px] tracking-[0.15em] leading-relaxed max-w-[280px] mx-auto uppercase">
-                    {col.description}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
+                    {/* Short information only—description removed */}
+                    <footer className="mt-6 flex items-center justify-between border-b border-brand-green/10 pb-5">
+                      <span className="text-[9px] uppercase tracking-[0.35em] text-gray-400">
+                        Digital Lookbook
+                      </span>
+
+                      <span className="text-[9px] uppercase tracking-[0.35em] text-brand-green transition-colors duration-500 group-hover:text-brand-gold">
+                        Open Edition
+                      </span>
+                    </footer>
+                  </article>
+                </Link>
+              )
+            })}
+          </section>
         )}
 
-        {/* Bottom Decorative Element */}
-        <div className="pt-20 text-center">
-          <p className="text-[10px] tracking-[0.4em] text-brand-gold/50 uppercase">
-            EST. 2025 • Modesty in Motion
+        <footer className="pt-28 text-center">
+          <div className="mx-auto mb-7 h-px w-10 bg-brand-gold/40" />
+
+          <p className="text-[9px] uppercase tracking-[0.5em] text-brand-gold/60">
+            Est. 2025 · Modesty in Motion
           </p>
-        </div>
+        </footer>
       </div>
-    </div>
+    </main>
   )
 }
