@@ -31,6 +31,28 @@ export default async function EditProductPage({
       )
     : undefined
 
+  /*
+   * Older database images may not have a Cloudinary publicId.
+   * ProductForm's UploadedImage type requires publicId to be a string,
+   * so missing values are safely normalized to an empty string.
+   */
+  const normalizedImages = (product.images ?? []).map(
+    (image: any) => ({
+      url: image.url,
+      publicId: image.publicId ?? '',
+      alt: image.alt ?? product.name,
+    })
+  )
+
+  const normalizedVariants = (product.variants ?? []).map(
+    (variant: any) => ({
+      size: variant.size ?? '',
+      color: variant.color ?? '',
+      stock: Number(variant.stock ?? 0),
+      sku: variant.sku ?? '',
+    })
+  )
+
   return (
     <div className="p-8">
       <h1 className="mb-8 font-serif text-2xl text-brand-green-800">
@@ -53,6 +75,7 @@ export default async function EditProductPage({
 
           isOnSale: product.isOnSale ?? false,
           salePrice: product.salePrice,
+          saleLabel: product.saleLabel,
           saleStart: product.saleStart
             ? new Date(product.saleStart).toISOString()
             : undefined,
@@ -60,8 +83,8 @@ export default async function EditProductPage({
             ? new Date(product.saleEnd).toISOString()
             : undefined,
 
-          images: product.images ?? [],
-          variants: product.variants ?? [],
+          images: normalizedImages,
+          variants: normalizedVariants,
           collectionId,
 
           status: product.status as
