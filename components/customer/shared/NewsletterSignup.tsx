@@ -29,7 +29,7 @@ export default function NewsletterSignup() {
   return (
     <div>
       <h4 className="text-brand-gold text-[9px] tracking-[0.6em] uppercase font-bold mb-4">
-        Get On The List
+        Join our Newsletter
       </h4>
 
       {status === 'success' ? (
