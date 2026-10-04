@@ -145,7 +145,7 @@ export default function HomePage() {
                 Every collection we create starts with one question, will she feel confident wearing this? We hope you feel that in every piece.
               </p>
               <Link 
-                href="/about" 
+                href="" 
                 className="inline-block text-[11px] tracking-[0.4em] uppercase border-b border-brand-gold pb-2 text-brand-green hover:text-brand-gold transition-all duration-500"
               >
                 Discover the Story
