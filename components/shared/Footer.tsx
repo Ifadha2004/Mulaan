@@ -58,7 +58,7 @@ export default function Footer() {
           </div>
           <p className="text-brand-cream/40 text-[11px] leading-relaxed tracking-[0.2em] uppercase max-w-xs">
             © estd 2025 <br />
-            Crafted for those who define elegance.
+            By Women Who Dare, To Women Who Define.
           </p>
         </div>
 
