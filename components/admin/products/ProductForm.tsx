@@ -35,6 +35,7 @@ interface ProductFormProps {
     description: string
     price: number
     displayOrder?: number
+    sizeGuideType?: 'adult' | 'kids'
 
     isOnSale?: boolean
     salePrice?: number
@@ -89,6 +90,10 @@ export default function ProductForm({
   const [displayOrder, setDisplayOrder] = useState(
     initialData?.displayOrder ?? 999
   )
+
+  const [sizeGuideType, setSizeGuideType] = useState<
+    'adult' | 'kids'
+  >(initialData?.sizeGuideType ?? 'adult')
 
   const [collectionId, setCollectionId] = useState(
     initialData?.collectionId ?? ''
@@ -213,6 +218,11 @@ export default function ProductForm({
       return false
     }
 
+    if (sizeGuideType !== 'adult' && sizeGuideType !== 'kids') {
+      toast.error('Please select a valid size guide')
+      return false
+    }
+
     if (images.length === 0) {
       toast.error('At least one product image is required')
       return false
@@ -323,6 +333,7 @@ export default function ProductForm({
       description: description.trim(),
       price,
       displayOrder,
+      sizeGuideType,
 
       collectionId: collectionId || undefined,
 
@@ -617,6 +628,34 @@ export default function ProductForm({
               display order 2.
             </p>
           </div>
+          <div>
+            <label
+              htmlFor="product-size-guide"
+              className={labelClass}
+            >
+              Size Guide *
+            </label>
+
+            <select
+              id="product-size-guide"
+              value={sizeGuideType}
+              onChange={(event) =>
+                setSizeGuideType(
+                  event.target.value as 'adult' | 'kids'
+                )
+              }
+              className={fieldClass}
+              required
+            >
+              <option value="adult">Adult Size Guide</option>
+              <option value="kids">Kids Size Guide</option>
+            </select>
+
+            <p className="mt-2 text-xs leading-relaxed text-gray-400">
+              Select the size guide customers should see for this product.
+            </p>
+          </div>
+
         </div>
       </section>
 
@@ -774,6 +813,8 @@ export default function ProductForm({
         <VariantManager
           value={variants}
           onChange={setVariants}
+          productSlug={slug}
+          sizeGuideType={sizeGuideType}
         />
       </section>
 

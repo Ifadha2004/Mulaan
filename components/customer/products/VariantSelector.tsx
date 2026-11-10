@@ -10,9 +10,12 @@ interface Variant {
   sku: string
 }
 
+type SizeGuideType = 'adult' | 'kids'
+
 interface VariantSelectorProps {
   variants: Variant[]
   onVariantChange: (variant: Variant) => void
+  sizeGuideType?: SizeGuideType
 }
 
 // Normalize for comparison/dedup: trim + lowercase. Prevents "Green" and
@@ -20,10 +23,24 @@ interface VariantSelectorProps {
 // as two different colors.
 const normalize = (val: string) => val.trim().toLowerCase()
 
-export default function VariantSelector({ variants, onVariantChange }: VariantSelectorProps) {
+export default function VariantSelector({
+  variants,
+  onVariantChange,
+  sizeGuideType = 'adult',
+}: VariantSelectorProps) {
   const [selectedSize, setSelectedSize] = useState<string>('')
   const [selectedColor, setSelectedColor] = useState<string>('')
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false)
+
+  const sizeGuideImage =
+    sizeGuideType === 'kids'
+      ? '/images/kids-size-guide.png'
+      : '/images/size-guide.png'
+
+  const sizeGuideAlt =
+    sizeGuideType === 'kids'
+      ? 'Mulaan Kids Size Guide'
+      : 'Mulaan Adult Size Guide'
 
   // Unique sizes, sorted numerically when possible (UK sizing: 6, 8, 10...),
   // falling back to alphabetical for any non-numeric sizes like "One Size"
@@ -214,8 +231,8 @@ export default function VariantSelector({ variants, onVariantChange }: VariantSe
               <X className="w-5 h-5" />
             </button>
             <img
-              src="/images/size-guide.png"
-              alt="Mulaan Size Guide"
+              src={sizeGuideImage}
+              alt={sizeGuideAlt}
               className="w-full h-auto"
             />
           </div>

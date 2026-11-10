@@ -73,6 +73,15 @@ export default async function EditProductPage({
           price: product.price,
           displayOrder: product.displayOrder ?? 999,
 
+          /*
+           * Older products will not have this field.
+           * They safely use the adult size guide by default.
+           */
+          sizeGuideType:
+            product.sizeGuideType === 'kids'
+              ? 'kids'
+              : 'adult',
+
           isOnSale: product.isOnSale ?? false,
           salePrice: product.salePrice,
           saleLabel: product.saleLabel,

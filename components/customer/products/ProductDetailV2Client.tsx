@@ -46,7 +46,13 @@ export default function ProductDetailV2Client({ product }: { product: any }) {
             <div className="space-y-6 border-t border-brand-green/5 pt-8">
               <StockIndicator variant={selectedVariant || undefined} totalStock={!selectedVariant ? totalStock : undefined} />
               <p className="font-light leading-loose tracking-wide text-gray-600">{product.description}</p>
-              {product.variants?.length > 0 && <VariantSelector variants={product.variants} onVariantChange={setSelectedVariant} />}
+              {product.variants?.length > 0 && (
+                <VariantSelector
+                  variants={product.variants}
+                  onVariantChange={setSelectedVariant}
+                  sizeGuideType={product.sizeGuideType ?? 'adult'}
+                />
+              )}
               <div className="space-y-3"><label className="block text-[10px] font-bold uppercase tracking-widest text-brand-green-800">Quantity</label><div className="flex items-center border border-brand-green/20 bg-white w-fit"><button type="button" onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-5 py-3" disabled={quantity <= 1 || campaignStatus === 'COMING_SOON'}>−</button><span className="min-w-[60px] border-x border-brand-green/10 px-6 py-3 text-center font-medium text-brand-green-800">{quantity}</span><button type="button" onClick={() => setQuantity(quantity + 1)} className="px-5 py-3" disabled={(selectedVariant ? quantity >= selectedVariant.stock : false) || campaignStatus === 'COMING_SOON'}>+</button></div></div>
             </div>
 
@@ -65,3 +71,4 @@ export default function ProductDetailV2Client({ product }: { product: any }) {
     </div>
   )
 }
+

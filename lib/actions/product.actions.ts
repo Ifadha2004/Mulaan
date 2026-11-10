@@ -284,6 +284,7 @@ interface ProductFormData {
   description: string
   price: number
   displayOrder: number
+  sizeGuideType: 'adult' | 'kids'
 
   isOnSale: boolean
   salePrice?: number
@@ -472,6 +473,13 @@ function validateProduct(
     return 'Display order must be a whole number between 1 and 9999'
   }
 
+  if (
+    data.sizeGuideType !== 'adult' &&
+    data.sizeGuideType !== 'kids'
+  ) {
+    return 'Please select a valid size guide'
+  }
+
   if (!Array.isArray(data.images)) {
     return 'Product images must be provided'
   }
@@ -539,6 +547,7 @@ function buildProductData(data: ProductFormData) {
     description: data.description.trim(),
     price: data.price,
     displayOrder: data.displayOrder,
+    sizeGuideType: data.sizeGuideType,
 
     images: data.images.map((image, index) => ({
       url: image.url.trim(),
